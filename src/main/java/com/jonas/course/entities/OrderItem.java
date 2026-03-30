@@ -1,10 +1,11 @@
 package com.jonas.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jonas.course.entities.pk.OrdemItemPK;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.antlr.v4.runtime.atn.SemanticContext;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,28 +13,30 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_order_item")
-public class OrdemItem implements Serializable {
+public class OrderItem implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private OrdemItemPK id;
+    private OrdemItemPK id = new OrdemItemPK();
 
     private Integer quantity;
 
     private Double price;
 
-    public OrdemItem(){
+    public OrderItem(){
 
     }
-    public OrdemItem(Order order, Product product, Integer quantity, Double price) {
+    
+    public OrderItem(Order order, Product product, Integer quantity, Double price) {
         id.setOrder(order);
         id.setProduct(product);
         this.quantity = quantity;
         this.price = price;
     }
 
+    @JsonIgnore
     public Order getOrder() {
         return id.getOrder();
     }
@@ -69,7 +72,7 @@ public class OrdemItem implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        OrdemItem ordemItem = (OrdemItem) o;
+        OrderItem ordemItem = (OrderItem) o;
         return Objects.equals(id, ordemItem.id);
     }
 
